@@ -10,6 +10,16 @@ namespace ByteBank
     {
         static void Main(string[] args)
         {
+            /*
+             using(LeitorArquivo arquivo = new LeitorArquivo("teste.txt"){
+                arquivo.LerProximaLinha()
+            })
+             
+             Essa estrutura é igual a:
+            try{}
+            catch{}
+            finally{}
+             */
             try
             {
                 //Metodo();
