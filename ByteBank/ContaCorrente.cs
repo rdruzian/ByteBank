@@ -1,5 +1,7 @@
 ﻿// using _05_ByteBank;
 
+using System;
+
 namespace ByteBank
 {
     public class ContaCorrente
@@ -8,25 +10,8 @@ namespace ByteBank
 
         public static int TotalDeContasCriadas { get; private set; }
 
-
-        private int _agencia;
-        public int Agencia
-        {
-            get
-            {
-                return _agencia;
-            }
-            set
-            {
-                if (value <= 0)
-                {
-                    return;
-                }
-
-                _agencia = value;
-            }
-        }
-        public int Numero { get; set; }
+        public int Agencia { get; }
+        public int Numero { get; }
 
         private double _saldo = 100;
 
@@ -50,6 +35,21 @@ namespace ByteBank
 
         public ContaCorrente(int agencia, int numero)
         {
+            if(agencia <= 0)
+            {
+                // Criando uma exceção nova
+                // throw new ArgumentException("Agênci e número devem ser maior que 0");
+                // Criando uma exceção de argumento, com isso fica mais claro que o problema é com o argumento passado
+                throw new ArgumentException("Agência deve ser maior que 0.", nameof(agencia));
+            }
+            if (numero <= 0)
+            {
+                // Criando uma exceção nova
+                // throw new ArgumentException("Agênci e número devem ser maior que 0");
+                // Criando uma exceção de argumento, com isso fica mais claro que o problema é com o argumento passado
+                // Adicionado o valor de ParamName, deixando mais simples de identifcar qual o arqgumento está com problema
+                throw new ArgumentException("Número deve ser maior que 0.", nameof(agencia));
+            }
             Agencia = agencia;
             Numero = numero;
 
@@ -57,15 +57,14 @@ namespace ByteBank
         }
 
 
-        public bool Sacar(double valor)
+        public void Sacar(double valor)
         {
             if (_saldo < valor)
             {
-                return false;
+                throw new SaldoInsuficienteExcepetion();
             }
 
             _saldo -= valor;
-            return true;
         }
 
         public void Depositar(double valor)
@@ -74,16 +73,10 @@ namespace ByteBank
         }
 
 
-        public bool Transferir(double valor, ContaCorrente contaDestino)
+        public void Transferir(double valor, ContaCorrente contaDestino)
         {
-            if (_saldo < valor)
-            {
-                return false;
-            }
-
-            _saldo -= valor;
+            this.Sacar(valor);
             contaDestino.Depositar(valor);
-            return true;
         }
     }
 }
