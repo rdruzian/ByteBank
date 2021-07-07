@@ -75,7 +75,16 @@ namespace ByteBank
 
         public void Transferir(double valor, ContaCorrente contaDestino)
         {
-            this.Sacar(valor);
+            try
+            {
+                this.Sacar(valor);
+            }
+            catch (SaldoInsuficienteExcepetion ex)
+            {
+                throw new OperacaoFinanceiraException("Operação não realizada", ex);
+                // Para pegar a exceção interna
+                // ex.innerException.Message ou ex.innerException.StackTrace
+            }
             contaDestino.Depositar(valor);
         }
     }
